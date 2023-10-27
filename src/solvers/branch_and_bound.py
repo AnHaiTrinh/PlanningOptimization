@@ -1,9 +1,9 @@
-from .Solver import Solver
+from .solver import Solver
 import numpy as np
 
 
 class BranchAndBoundSolver(Solver):
-    def solve(self):
+    def solve(self) -> int:
         visited = np.array([False] * (2 * self.n + 1))
         num_passengers = 0
         min_distance = np.inf
@@ -39,4 +39,4 @@ class BranchAndBoundSolver(Solver):
                         current_distance -= self.costs[last_visited][i + self.n]
 
         Try(0, 0)
-        return 'Optimal', min_distance
+        return min_distance

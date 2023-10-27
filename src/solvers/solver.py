@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import numpy as np
 
 
 class Solver(ABC):
@@ -10,16 +9,16 @@ class Solver(ABC):
         self.optimal = optimal
 
     @abstractmethod
-    def solve(self):
+    def solve(self) -> int:
         pass
 
-    def evaluate(self):
+    def evaluate(self) -> None:
+        result = self.solve()
         if not self.optimal:
             print('Optimal solution is not given')
-            return
+            print(f'Calculated optimal: {result}')
 
-        status, result = self.solve()
-        if status == 'Optimal':
+        else:
             print(f'Found results: {result}')
             print(f'Optimal results: {self.optimal}')
             if result == self.optimal:
@@ -28,9 +27,3 @@ class Solver(ABC):
                 print('Verdict: More optimal')
             else:
                 print('Verdict: Suboptimal')
-
-        elif status == 'Unbounded':
-            print('Verdict: Unbounded')
-
-        else:
-            print('Verdict: Infeasible')
