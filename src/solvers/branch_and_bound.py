@@ -13,7 +13,7 @@ class BranchAndBoundSolver(Solver):
         def check(num_stops):
             return num_passengers <= self.k and (current_distance + min_cost * (2 * self.n - num_stops)) < min_distance
 
-        def Try(last_visited, num_stops):
+        def backtrack(last_visited, num_stops):
             nonlocal current_distance, min_distance, num_passengers
             if num_stops == 2 * self.n:
                 if current_distance + self.costs[last_visited][0] < min_distance:
@@ -25,7 +25,7 @@ class BranchAndBoundSolver(Solver):
                         visited[i] = True
                         num_passengers += 1
                         current_distance += self.costs[last_visited][i]
-                        Try(i, num_stops + 1)
+                        backtrack(i, num_stops + 1)
                         visited[i] = False
                         num_passengers -= 1
                         current_distance -= self.costs[last_visited][i]
@@ -33,10 +33,10 @@ class BranchAndBoundSolver(Solver):
                         visited[i + self.n] = True
                         num_passengers -= 1
                         current_distance += self.costs[last_visited][i + self.n]
-                        Try(i + self.n, num_stops + 1)
+                        backtrack(i + self.n, num_stops + 1)
                         visited[i + self.n] = False
                         num_passengers += 1
                         current_distance -= self.costs[last_visited][i + self.n]
 
-        Try(0, 0)
-        return min_distance
+        backtrack(0, 0)
+        return int(min_distance)

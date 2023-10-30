@@ -23,10 +23,9 @@ pip install -r requirements.txt
 ```
 ## Run project
 ```bash
-cd src
-python main.py --filename <filename> --solver <solver> [--return-time]
+python -m src.main --filename <filename> --solver <solver> [--return-time]
 ```
 For more information, run:
 ```bash
-python main.py --help
+python -m src.main --help
 ```
