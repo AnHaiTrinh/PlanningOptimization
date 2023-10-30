@@ -9,6 +9,7 @@ def parse_args():
                         help='Input and output file name. Will read from stdin if left blank')
     parser.add_argument('--solver', type=str, default='bnb', choices=['bnb'],
                         help='Solver name')
+    parser.add_argument('--return-time', action='store_true', help='Return time taken to solve')
     cmd_args = parser.parse_args()
 
     filename = cmd_args.filename
@@ -18,7 +19,7 @@ def parse_args():
     else:
         input_file = output_file = None
 
-    return input_file, output_file, cmd_args.solver
+    return input_file, output_file, cmd_args.solver, bool(cmd_args.return_time)
 
 
 def read_input(input_file):

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import time
 
 
 class Solver(ABC):
@@ -12,8 +13,14 @@ class Solver(ABC):
     def solve(self) -> int:
         pass
 
-    def evaluate(self) -> None:
+    def evaluate(self, return_time: bool) -> None:
+        start_time = time.time()
         result = self.solve()
+        finish_time = round(time.time() - start_time, 4)
+        if return_time:
+            print(f'Time taken: {finish_time} seconds')
+            print('----------------------------------')
+
         if not self.optimal:
             print('Optimal solution is not given')
             print(f'Calculated optimal: {result}')
@@ -27,3 +34,4 @@ class Solver(ABC):
                 print('Verdict: More optimal')
             else:
                 print('Verdict: Suboptimal')
+
