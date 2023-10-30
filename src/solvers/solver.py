@@ -16,9 +16,9 @@ class Solver(ABC):
     def evaluate(self, return_time: bool) -> None:
         start_time = time.time()
         result = self.solve()
-        finish_time = round(time.time() - start_time, 4)
+        duration = round(time.time() - start_time, 4)
         if return_time:
-            print(f'Time taken: {finish_time} seconds')
+            print(f'Time taken: {duration} seconds')
             print('----------------------------------')
 
         if not self.optimal:
