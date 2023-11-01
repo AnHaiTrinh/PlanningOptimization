@@ -1,5 +1,5 @@
 from .solvers.solver_factory import SolverFactory
-from .utils.Parser import parse_args, read_input, read_output
+from .utils.parser import parse_args, read_input, read_output
 
 
 if __name__ == '__main__':
