@@ -1,10 +1,12 @@
+from abc import ABC
+
 from ortools.linear_solver import pywraplp
 from .solver import Solver
-from ..utils.generation import generate_real_subset
+from ..utils.generation import generate_real_subset, generate_non_empty_subset
 
 
-class IpSolver(Solver):
-    def solve(self) -> int:
+class AbstractIpSolver(Solver, ABC):
+    def ip_modelling(self):
         M = 2 * self.n + 1
         solver = pywraplp.Solver.CreateSolver('SCIP')
 
@@ -16,10 +18,6 @@ class IpSolver(Solver):
         for i in range(2 * self.n + 1):
             solver.Add(sum(x[i][j] for j in range(2 * self.n + 1)) == 1)
             solver.Add(sum(x[j][i] for j in range(2 * self.n + 1)) == 1)
-
-        # No cycle constraint
-        for subset in generate_real_subset(2 * self.n):
-            solver.Add(sum(x[i][j] for i in subset for j in subset) <= len(subset) - 1)
 
         # Start at point 0
         solver.Add(y[0] == 0)
@@ -55,8 +53,52 @@ class IpSolver(Solver):
             solver.Add(z[i] <= self.k)
 
         solver.Minimize(sum(self.costs[i][j] * x[i][j] for i in range(2 * self.n + 1) for j in range(2 * self.n + 1)))
+        return x, y, z, solver
+
+
+class IpSolver(AbstractIpSolver):
+    def solve(self) -> int:
+        x, _, _, solver = self.ip_modelling()
+        # Add no cycles constraint
+        for subset in generate_real_subset(2 * self.n):
+            solver.Add(sum(x[i][j] for i in subset for j in subset) <= len(subset) - 1)
         status = solver.Solve()
         if status == pywraplp.Solver.OPTIMAL:
             return int(solver.Objective().Value())
         else:
             raise Exception('No solution found')
+
+
+class DynamicIpSolver(AbstractIpSolver):
+    def get_cycles(self, x):
+        visited = set()
+        cycles = []
+        for i in range(2 * self.n + 1):
+            if i not in visited:
+                current = i
+                current_cycle = []
+                while current not in current_cycle:
+                    current_cycle.append(current)
+                    visited.add(current)
+                    for j in range(2 * self.n + 1):
+                        if x[current][j].solution_value() == 1:
+                            current = j
+                            break
+                cycles.append(current_cycle)
+        return cycles
+
+    def solve(self) -> int:
+        x, _, _, solver = self.ip_modelling()
+        current_cycles = []
+        while True:
+            for current_cycle in current_cycles:
+                for non_empty_subset in generate_non_empty_subset(current_cycle):
+                    solver.Add(sum(x[i][j] for i in non_empty_subset for j in non_empty_subset) <= len(non_empty_subset) - 1)
+            status = solver.Solve()
+            if status == pywraplp.Solver.OPTIMAL:
+                current_cycles = self.get_cycles(x)
+                if len(current_cycles) == 1:
+                    break
+            else:
+                raise Exception('No solution found')
+        return int(solver.Objective().Value())
