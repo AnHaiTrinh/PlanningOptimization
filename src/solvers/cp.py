@@ -86,6 +86,7 @@ class DynamicCpSolver(AbstractCpSolver):
                             break
                 cycles.append(current_cycle)
         return cycles
+
     def solve(self) -> int:
         x, _, _, model = self.cp_modelling()
         cp_solver = cp_model.CpSolver()

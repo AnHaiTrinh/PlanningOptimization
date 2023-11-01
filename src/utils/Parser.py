@@ -41,24 +41,6 @@ def read_input(input_file):
     return n, k, costs
 
 
-def read_input(input_file):
-    if input_file:
-        try:
-            with open(input_file, 'r') as f:
-                n, k = map(int, f.readline().split())
-                costs = np.array([list(map(int, f.readline().split())) for _ in range(2 * n + 1)])
-        except Exception as e:
-            raise e
-    else:
-        try:
-            n, k = map(int, input().split())
-            costs = np.array([list(map(int, input().split())) for _ in range(2 * n + 1)])
-        except Exception as e:
-            raise e
-
-    return n, k, costs
-
-
 def read_output(output_file):
     optimal = None
     if output_file:
