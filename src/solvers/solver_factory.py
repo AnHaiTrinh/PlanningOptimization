@@ -1,7 +1,7 @@
 import numpy as np
 from .branch_and_bound import BranchAndBoundSolver
-from .ip import IpSolver, DynamicIpSolver
-from .cp import CpSolver, DynamicCpSolver
+from .ip import IpSolver
+from .cp import CpSolver
 from .solver import Solver
 
 
@@ -17,11 +17,7 @@ class SolverFactory:
             return BranchAndBoundSolver(self.n, self.k, self.costs, self.optimal)
         elif solver_name == 'ip':
             return IpSolver(self.n, self.k, self.costs, self.optimal)
-        elif solver_name == 'dip':
-            return DynamicIpSolver(self.n, self.k, self.costs, self.optimal)
         elif solver_name == 'cp':
             return CpSolver(self.n, self.k, self.costs, self.optimal)
-        elif solver_name == 'dcp':
-            return DynamicCpSolver(self.n, self.k, self.costs, self.optimal)
         else:
             raise NotImplementedError(f'Solver {solver_name} is not implemented')
