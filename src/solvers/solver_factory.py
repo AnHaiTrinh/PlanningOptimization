@@ -3,6 +3,7 @@ from .branch_and_bound import BranchAndBoundSolver
 from .ip import IpSolver
 from .cp import CpSolver
 from .solver import Solver
+from .heuristic import Heuristic
 
 
 class SolverFactory:
@@ -19,5 +20,7 @@ class SolverFactory:
             return IpSolver(self.n, self.k, self.costs, self.optimal)
         elif solver_name == 'cp':
             return CpSolver(self.n, self.k, self.costs, self.optimal)
+        elif solver_name == "heuristic":
+            return Heuristic(self.n, self.k, self.costs, self.optimal)
         else:
             raise NotImplementedError(f'Solver {solver_name} is not implemented')
