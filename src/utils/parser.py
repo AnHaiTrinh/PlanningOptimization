@@ -10,7 +10,7 @@ def parse_args():
     parser.add_argument('--solver', type=str, default='bnb',
                         choices=['bnb', 'ip', 'cp', "heuristic"],
                         help='Solver name')
-    parser.add_argument('--return-time', default=True, action='store_true', help='Return time taken to solve')
+    parser.add_argument('--return-time', action='store_true', help='Return time taken to solve')
     cmd_args = parser.parse_args()
 
     filename = cmd_args.filename
