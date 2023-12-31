@@ -8,7 +8,7 @@ def parse_args():
     parser.add_argument('--filename', type=str, default='',
                         help='Input and output file name. Will read from stdin if left blank')
     parser.add_argument('--solver', type=str, default='bnb',
-                        choices=['bnb', 'ip', 'cp'],
+                        choices=['bnb', 'ip', 'cp', 'ls','lam_bnb'],
                         help='Solver name')
     parser.add_argument('--return-time', action='store_true', help='Return time taken to solve')
     cmd_args = parser.parse_args()
