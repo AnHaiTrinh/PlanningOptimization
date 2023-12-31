@@ -1,6 +1,6 @@
 from .solvers.solver_factory import SolverFactory
 from .utils.parser import parse_args, read_input, read_output
-
+import os
 
 if __name__ == '__main__':
     input_file, output_file, solver_name, return_time = parse_args()
