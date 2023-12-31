@@ -9,7 +9,7 @@ class IpSolver(Solver):
 
         x = [[solver.IntVar(0, 1, f'x({i}, {j})') for j in range(2 * self.n + 1)] for i in range(2 * self.n + 1)]
         y = [solver.IntVar(0, 2 * self.n, f'y({i})') for i in range(2 * self.n + 1)]
-        z = [solver.IntVar(0, self.n, f'z({i})') for i in range(2 * self.n + 1)]
+        z = [solver.IntVar(0, self.k, f'z({i})') for i in range(2 * self.n + 1)]
 
         # Each point is visited once
         for i in range(2 * self.n + 1):
@@ -23,8 +23,8 @@ class IpSolver(Solver):
         for i in range(2 * self.n + 1):
             for j in range(2 * self.n + 1):
                 if j == 0:
-                    solver.Add(y[i] <= y[j] + 2 * self.n + M * (1 - x[i][j]))
-                    solver.Add(y[j] + 2 * self.n <= y[i] + M * (1 - x[i][j]))
+                    solver.Add(y[i] - 2 * self.n <= y[j] + M * (1 - x[i][j]))
+                    solver.Add(y[j] <= y[i] - 2 * self.n + M * (1 - x[i][j]))
                 else:
                     solver.Add(y[i] + 1 <= y[j] + M * (1 - x[i][j]))
                     solver.Add(y[j] <= y[i] + 1 + M * (1 - x[i][j]))
@@ -44,10 +44,6 @@ class IpSolver(Solver):
             for j in range(self.n + 1, 2 * self.n + 1):
                 solver.Add(z[i] - 1 <= z[j] + M * (1 - x[i][j]))
                 solver.Add(z[j] <= z[i] - 1 + M * (1 - x[i][j]))
-
-        # Maximum capacity constraint
-        for i in range(1, 2 * self.n + 1):
-            solver.Add(z[i] <= self.k)
 
         solver.Minimize(sum(self.costs[i][j] * x[i][j] for i in range(2 * self.n + 1) for j in range(2 * self.n + 1)))
         status = solver.Solve()
