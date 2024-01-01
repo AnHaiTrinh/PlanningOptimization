@@ -2,7 +2,7 @@ from .solver import Solver
 import numpy as np
 
 
-class BranchAndBoundSolver2(Solver):
+class BranchAndBoundSolver(Solver):
     def solve(self) -> int:
         # visited[i] = True nếu đã đi qua i, False nếu chưa
         visited = np.array([False] * (2 * self.n + 1))
@@ -65,4 +65,4 @@ class BranchAndBoundSolver2(Solver):
                             num_passengers += 1
 
         backtrack(0)
-        return min_distance
+        return int(min_distance)
