@@ -187,3 +187,4 @@ fabric.properties
 # ignore classwork
 classWork/
 test.py
+logs.txt
