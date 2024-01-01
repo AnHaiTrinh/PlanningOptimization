@@ -1,3 +1,4 @@
+from .greedy import GreedySolver
 from .ip import IpSolver
 from .cp import CpSolver
 from .solver import Solver
@@ -24,5 +25,7 @@ class SolverFactory:
             return GASolver(self.n, self.k, self.costs, self.optimal)
         elif solver_name == 'ls':
             return LSSolver(self.n, self.k, self.costs, self.optimal)
+        elif solver_name == 'greedy':
+            return GreedySolver(self.n, self.k, self.costs, self.optimal)
         else:
             raise NotImplementedError(f'Solver {solver_name} is not implemented')
