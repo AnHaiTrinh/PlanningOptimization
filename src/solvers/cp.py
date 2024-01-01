@@ -9,7 +9,7 @@ class CpSolver(Solver):
 
         x = [[model.NewIntVar(0, 1, f'x({i}, {j})') for j in range(2 * self.n + 1)] for i in range(2 * self.n + 1)]
         y = [model.NewIntVar(0, 2 * self.n, f'y({i})') for i in range(2 * self.n + 1)]
-        z = [model.NewIntVar(0, self.n, f'z({i})') for i in range(2 * self.n + 1)]
+        z = [model.NewIntVar(0, self.k, f'z({i})') for i in range(2 * self.n + 1)]
 
         # Each point is visited once
         for i in range(2 * self.n + 1):
@@ -23,15 +23,15 @@ class CpSolver(Solver):
         for i in range(2 * self.n + 1):
             for j in range(2 * self.n + 1):
                 if j == 0:
-                    model.Add(y[i] <= y[j] + 2 * self.n + M * (1 - x[i][j]))
-                    model.Add(y[j] + 2 * self.n <= y[i] + M * (1 - x[i][j]))
+                    model.Add(y[i] - 2 * self.n <= y[j] + M * (1 - x[i][j]))
+                    model.Add(y[j] <= y[i] - 2 * self.n + M * (1 - x[i][j]))
                 else:
                     model.Add(y[i] + 1 <= y[j] + M * (1 - x[i][j]))
                     model.Add(y[j] <= y[i] + 1 + M * (1 - x[i][j]))
 
         # Visit point i before point i + n
         for i in range(1, self.n + 1):
-            model.Add(y[i] < y[i + self.n])
+            model.Add(y[i] + 1 <= y[i + self.n])
 
         # Initially there are no passengers
         model.Add(z[0] == 0)
@@ -44,10 +44,6 @@ class CpSolver(Solver):
             for j in range(self.n + 1, 2 * self.n + 1):
                 model.Add(z[i] - 1 <= z[j] + M * (1 - x[i][j]))
                 model.Add(z[j] <= z[i] - 1 + M * (1 - x[i][j]))
-
-        # Maximum capacity constraint
-        for i in range(1, 2 * self.n + 1):
-            model.Add(z[i] <= self.k)
 
         model.Minimize(sum(self.costs[i][j] * x[i][j] for i in range(2 * self.n + 1) for j in range(2 * self.n + 1)))
         solver = cp_model.CpSolver()
