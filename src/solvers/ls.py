@@ -271,5 +271,6 @@ class LSSolver(Solver):
                     self.current_cost_path = max_costs
             # print(current_cost_path)
         local_search(100)
+        print('Greedy: ', sum)
         return self.current_cost_path
     

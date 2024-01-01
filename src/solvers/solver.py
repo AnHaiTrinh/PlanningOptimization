@@ -34,4 +34,8 @@ class Solver(ABC):
                 print('Verdict: More optimal')
             else:
                 print('Verdict: Suboptimal')
+        
+        f = open('logs.txt', 'a')
+        f.write(f'\t{self.n} - {self.k} - {result} - time: {duration}\n')
+        f.close()
 
