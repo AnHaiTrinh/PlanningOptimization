@@ -17,9 +17,6 @@ class Solver(ABC):
         start_time = time.time()
         result = self.solve()
         duration = round(time.time() - start_time, 4)
-        f = open('logs.txt', 'a')
-        f.write(f'\t{self.n} - {self.k} - {result} - time: {duration}\n')
-        f.close()
         if return_time:
             print(f'Time taken: {duration} seconds')
             print('----------------------------------')
@@ -37,4 +34,8 @@ class Solver(ABC):
                 print('Verdict: More optimal')
             else:
                 print('Verdict: Suboptimal')
+        
+        f = open('logs.txt', 'a')
+        f.write(f'\t{self.n} - {self.k} - {result} - time: {duration}\n')
+        f.close()
 

@@ -34,7 +34,7 @@ class BranchAndBoundSolver(Solver):
         
         # Kiểm tra xem có thể cắt nhánh không
         def check_can_cut(step):
-            return current_distance + min_cost * (2 * self.n - step) < min_distance
+            return current_distance + min_cost * (2 * self.n + 1 - step) < min_distance
 
         # Hàm quay lui
         def backtrack(step):
