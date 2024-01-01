@@ -3,7 +3,10 @@ from .branch_and_bound import BranchAndBoundSolver
 from .ip import IpSolver
 from .cp import CpSolver
 from .solver import Solver
+from .ls import LSSolver
+from .bnb import BranchAndBoundSolver2
 from .ga_optimize import Heuristic_GA
+
 
 class SolverFactory:
     def __init__(self, n, k, costs, optimal):
@@ -21,5 +24,9 @@ class SolverFactory:
             return CpSolver(self.n, self.k, self.costs, self.optimal)
         elif solver_name == "heuristic":
             return Heuristic_GA(self.n, self.k, self.costs, self.optimal)
+        elif solver_name == 'ls':
+            return LSSolver(self.n, self.k, self.costs, self.optimal)
+        elif solver_name == 'lam_bnb':
+            return BranchAndBoundSolver2(self.n, self.k, self.costs, self.optimal)
         else:
             raise NotImplementedError(f'Solver {solver_name} is not implemented')
